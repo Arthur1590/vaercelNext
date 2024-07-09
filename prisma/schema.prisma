@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+model profiles {
+  id              String  @id @db.Uuid
+  username        String  @unique
+  photo           String
+  balance         Int     @default(0)
+  wallet          String?
+  chests          Int     @default(0)
+  role            Role    @default(user)
+  inviter         String?
+  refCode         String?
+  hasSpecialPrize Boolean @default(false)
+  hasSpecialItem  Boolean @default(false)
+  passedAddInviter  Boolean @default(false)
+  passedTwitter     Boolean @default(false)
+}
+
+model Config {
+  id                      Int      @id @default(autoincrement())
+  addWalletChance         Float    @default(5)
+  addWalletUsernameChance Float    @default(3)
+  checkerEnabled          Boolean  @default(true)
+  wallets                 String[] @default([])
+  specials                String[] @default([])
+}
